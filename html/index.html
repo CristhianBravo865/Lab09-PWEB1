@@ -1,21 +1,42 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <title>Consultas Universidades Licenciadas</title>
     <link rel="stylesheet" href="../css/styles.css">
 </head>
-
 <body>
     <header>
         <img src="../images/fips-logo.png" alt="Logo Universidad">
     </header>
-    
 
-    
+    <main>
+        <section id="consulta-section">
+            <h1>Consulta Universidades Licenciadas</h1>
+            <form id="consulta-form" action="/cgi-bin/consulta.py" method="get">
+                <label for="nombre">Nombre de la Universidad:</label>
+                <input type="text" id="nombre" name="nombre" placeholder="Ingrese nombre de la universidad">
+
+                <label for="periodo">Periodo de Licenciamiento:</label>
+                <input type="text" id="periodo" name="periodo" placeholder="Ejemplo: 10">
+
+                <label for="departamento">Departamento Local:</label>
+                <input type="text" id="departamento" name="departamento" placeholder="Ejemplo: Arequipa">
+
+                <label for="programa">Denominación Programa:</label>
+                <input type="text" id="programa" name="programa" placeholder="Ejemplo: Lingüistica">
+
+                <button type="submit">Consultar</button>
+            </form>
+
+            <div id="resultados">
+                <!-- Gestion resultados-->
+            </div>
+        </section>
+    </main>
+
     <footer>
-        <p> Cristhian Bravo</p>
+        <p>Cristhian Bravo</p>
     </footer>
 </body>
 </html>

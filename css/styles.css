@@ -15,9 +15,6 @@ header {
     background-color: rgb(38, 35, 35);
     padding: 10px 0; 
 }
-
-
-
 header img {
     margin-left: 10px;
     vertical-align: middle; 
@@ -31,5 +28,4 @@ footer{
     text-align: center;
     font-family: Arial, sans-serif;
     bottom: 0;
-
 }
