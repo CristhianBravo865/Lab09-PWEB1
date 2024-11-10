@@ -12,32 +12,40 @@ my $periodo = $cgi->param('periodo') || '';
 my $departamento = $cgi->param('departamento') || '';
 my $programa = $cgi->param('programa') || '';
 
-print $cgi->header(-type => 'text/plain', -charset => 'UTF-8');
+print $cgi->header(-type => 'text/html', -charset => 'UTF-8');
 
 if (! -e $file_path) {
-    print "Error: El archivo de datos no se encuentra.";
+    print "<p>Error: El archivo de datos no se encuentra.</p>";
     exit;
 }
 
 open(my $fh, '<:encoding(ISO-8859-1)', $file_path) or die "No se puede abrir el archivo: $!";
 
-my @resultados;
+my $resultados_html = "<table border='1'><tr><th>Nombre Universidad</th><th>Periodo Licenciamiento</th><th>Departamento</th><th>Programa</th></tr>";
+my $hay_resultados = 0;
+
 while (my $line = <$fh>) {
     chomp $line;
-    my @campos = split(/\|/, $line);
+    my @fields = split(/\|/, $line);
 
-    if (($nombre eq '' || $campos[1] =~ /\Q$nombre\E/i) &&
-        ($periodo eq '' || $campos[6] =~ /\Q$periodo\E/i) &&
-        ($departamento eq '' || $campos[12] =~ /\Q$departamento\E/i) &&
-        ($programa eq '' || $campos[18] =~ /\Q$programa\E/i)) {
+    my $nombre_uni = $fields[1];
+    my $periodo_lic = $fields[6];
+    my $depto_local = $fields[12];
+    my $denominacion_prog = $fields[18];
 
-        push @resultados, join(", ", @campos[1, 6, 12, 18]);
+    if (($nombre eq '' || $nombre_uni =~ /\Q$nombre\E/i) &&
+        ($periodo eq '' || $periodo_lic =~ /\Q$periodo\E/i) &&
+        ($departamento eq '' || $depto_local =~ /\Q$departamento\E/i) &&
+        ($programa eq '' || $denominacion_prog =~ /\Q$programa\E/i)) {
+        $resultados_html .= "<tr><td>$nombre_uni</td><td>$periodo_lic</td><td>$depto_local</td><td>$denominacion_prog</td></tr>";
+        $hay_resultados = 1;
     }
 }
 close $fh;
 
-if (@resultados) {
-    print join("\n", @resultados);
+if ($hay_resultados) {
+    $resultados_html .= "</table>";
+    print $resultados_html;
 } else {
-    print "No se encontraron resultados para los criterios especificados.";
+    print "<p>No se encontraron resultados para los criterios especificados.</p>";
 }
