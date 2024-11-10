@@ -9,34 +9,50 @@
     <header>
         <img src="../images/fips-logo.png" alt="Logo Universidad">
     </header>
-
     <main>
         <section id="consulta-section">
             <h1>Consulta Universidades Licenciadas</h1>
-            <form id="consulta-form" action="/cgi-bin/consultauniversidades.pl" method="get">
+            <form id="consulta-form">
                 <label for="nombre">Nombre de la Universidad:</label>
                 <input type="text" id="nombre" name="nombre" placeholder="Ingrese nombre de la universidad">
-
                 <label for="periodo">Periodo de Licenciamiento:</label>
                 <input type="text" id="periodo" name="periodo" placeholder="Ejemplo: 10">
-
                 <label for="departamento">Departamento Local:</label>
                 <input type="text" id="departamento" name="departamento" placeholder="Ejemplo: Arequipa">
-
                 <label for="programa">Denominación Programa:</label>
                 <input type="text" id="programa" name="programa" placeholder="Ejemplo: Lingüistica">
-
                 <button type="submit">Consultar</button>
             </form>
-
             <div id="resultados">
-                <!-- Gestion resultados-->
+                <!-- Aquí se muestran -->
             </div>
         </section>
     </main>
-
     <footer>
         <p>Cristhian Bravo</p>
     </footer>
+
+    <script>
+        document.getElementById('consulta-form').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            const nombre = document.getElementById('nombre').value;
+            const periodo = document.getElementById('periodo').value;
+            const departamento = document.getElementById('departamento').value;
+            const programa = document.getElementById('programa').value;
+
+            const url = `/cgi-bin/consultauniversidades.pl?nombre=${encodeURIComponent(nombre)}&periodo=${encodeURIComponent(periodo)}&departamento=${encodeURIComponent(departamento)}&programa=${encodeURIComponent(programa)}`;
+
+            fetch(url)
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('resultados').innerHTML = `<table><tr><th>Universidad</th><th>Periodo</th><th>Departamento</th><th>Programa</th></tr>${data.split("\n").map(row => `<tr>${row.split(", ").map(cell => `<td>${cell}</td>`).join("")}</tr>`).join("")}</table>`;
+                })
+                .catch(error => {
+                    console.error('Error en la consulta:', error);
+                    document.getElementById('resultados').innerText = 'Hubo un error en la consulta.';
+                });
+        });
+    </script>
 </body>
 </html>
